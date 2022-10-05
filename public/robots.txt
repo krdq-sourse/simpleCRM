@@ -1,2 +1,2 @@
-User-agent: *
+mix-manifest.jsonUser-agent: *
 Disallow:
