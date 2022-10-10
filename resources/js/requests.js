@@ -1,4 +1,4 @@
-function ajaxRequest(method, headers, url, data, success, error)
+window.ajaxRequest = function ajaxRequest(method, headers, url, data, success, error)
 {
     $.ajax({
         type   : method,

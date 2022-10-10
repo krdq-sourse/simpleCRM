@@ -63,4 +63,9 @@ class CompanyRepository implements CompanyRepositoryInterfaces
     {
         Company::create($data);
     }
+
+    public function paginate($perPage)
+    {
+        return Company::paginate($perPage);
+    }
 }

@@ -6,7 +6,6 @@ use App\Http\Requests\StoreCompanyRequest;
 use App\Models\Company;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -24,9 +23,16 @@ class CompanyController extends Controller
         $this->companyRepository = $companyRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $companies = $this->companyRepository->all();
+        $rowsPerPage = ($request->get('rowsPerPage') > 0)
+            ? $request->get('rowsPerPage')
+            : 0;
+
+        $companies = $rowsPerPage
+            ? $this->companyRepository->paginate($rowsPerPage)
+            : $this->companyRepository->all();
+
         return response($companies->toJson(), 200);
     }
 
@@ -50,22 +56,18 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param StoreCompanyRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCompanyRequest $request)
     {
-        try {
-            $this->companyRepository->create($request->only('name'));
-            $response = $this->respondSuccess(
-                __('messages.saved_successfully')
-            );
-        } catch (Exception $e) {
-            $response = $this->respondWentWrong($e);
-        }
+        $validated = $request->validated();
+        $this->companyRepository->create($validated);
 
-        return $response;
+        return $this->respondSuccess(
+            __('messages.saved_successfully')
+        );
     }
 
     /**

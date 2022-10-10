@@ -9,6 +9,8 @@ interface CompanyRepositoryInterfaces
 {
     public function all();
 
+    public function paginate($perPage);
+
     public function getById(int $id);
 
     public function getByUser(User $user);

@@ -6,17 +6,21 @@ $(document).ready(function () {
     createCompanyForm.on('submit', function (event) {
         event.preventDefault();
         const METHOD = 'POST';
-        const URL    = createCompanyForm.getAttribute('action');
+        const URL    = createCompanyForm.attr('action');
 
         let headers = {
             'X-CSRF-TOKEN': csrf,
         };
-        let data    = createCompanyForm.serializeFormJSON();
+        let data    = createCompanyForm.serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
 
         ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
     });
 
-    function createCompanySuccess(response) {
+    function createCompanySuccess(response)
+    {
         createCompanyForm[0].reset();
         const successAlert = $('#successAlert');
         if (successAlert) {
@@ -24,7 +28,8 @@ $(document).ready(function () {
         }
     }
 
-    function createCompanyError(response) {
+    function createCompanyError(response)
+    {
         const errorAlert = $('#errorAlert');
         if (errorAlert) {
             errorAlert.toggleClass('hidden');
@@ -32,7 +37,7 @@ $(document).ready(function () {
     }
 
     alertsClose.on('click', function () {
-        this.toggleClass('hidden');
+        $(this).parent().toggleClass('hidden');
     });
 });
 

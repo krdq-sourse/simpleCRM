@@ -48,24 +48,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 try {
   window.Popper = (__webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"]);
-  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //добавил свою функцию в jq
-
-  window.$.fn.serializeFormJSON = function () {
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function () {
-      if (o[this.name]) {
-        if (!o[this.name].push) {
-          o[this.name] = [o[this.name]];
-        }
-
-        o[this.name].push(this.value || '');
-      } else {
-        o[this.name] = this.value || '';
-      }
-    });
-    return o;
-  };
+  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
@@ -94,20 +77,41 @@ try {
 $(document).ready(function () {
   var createCompanyForm = $('#companyFrom');
   var csrf = $('meta[name="csrf-token"]').attr('content');
+  var alertsClose = $('.close');
   createCompanyForm.on('submit', function (event) {
     event.preventDefault();
     var METHOD = 'POST';
-    var URL = createCompanyForm.getAttribute('action');
+    var URL = createCompanyForm.attr('action');
     var headers = {
       'X-CSRF-TOKEN': csrf
     };
-    var data = createCompanyForm.serializeFormJSON();
-    ajaxRequest(METHOD, headers, URL, data);
+    var data = createCompanyForm.serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
   });
 
-  function createCompanySuccess(data) {
+  function createCompanySuccess(response) {
     createCompanyForm[0].reset();
+    var successAlert = $('#successAlert');
+
+    if (successAlert) {
+      successAlert.toggleClass('hidden');
+    }
   }
+
+  function createCompanyError(response) {
+    var errorAlert = $('#errorAlert');
+
+    if (errorAlert) {
+      errorAlert.toggleClass('hidden');
+    }
+  }
+
+  alertsClose.on('click', function () {
+    $(this).parent().toggleClass('hidden');
+  });
 });
 
 /***/ }),
@@ -118,7 +122,7 @@ $(document).ready(function () {
   \**********************************/
 /***/ (() => {
 
-function ajaxRequest(method, headers, url, data, _success, _error) {
+window.ajaxRequest = function ajaxRequest(method, headers, url, data, _success, _error) {
   $.ajax({
     type: method,
     headers: headers,
@@ -131,7 +135,7 @@ function ajaxRequest(method, headers, url, data, _success, _error) {
       _error(response);
     }
   });
-}
+};
 
 /***/ }),
 
