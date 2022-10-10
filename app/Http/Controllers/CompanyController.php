@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
+use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -11,6 +13,7 @@ class CompanyController extends Controller
 
     /**
      * @param CompanyRepositoryInterfaces $companyRepository
+     *
      * @return void
      */
     public function __construct(CompanyRepositoryInterfaces $companyRepository)
@@ -22,12 +25,14 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = $this->companyRepository->all();
-        return view('company', ['companies' => $companies]);
+        return response($companies->toJson(), 200);
     }
 
-    public function getClientCompanies()
+    public function getClientCompanies($id)
     {
-        //
+        $user      = User::find($id);
+        $companies = $this->companyRepository->getByUser($user);
+        return response($companies->toJson(), 200);
     }
 
     /**
@@ -43,7 +48,8 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,7 +60,8 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -65,7 +72,8 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -76,8 +84,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -88,7 +97,8 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
