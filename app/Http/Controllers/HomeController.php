@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Repositories\CompanyRepository;
+use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller

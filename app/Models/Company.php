@@ -10,4 +10,12 @@ class Company extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'clients', 'company_id', 'user_id');
+    }
 }

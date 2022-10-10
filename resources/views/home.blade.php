@@ -23,6 +23,10 @@
                                     <td>Microsoft</td>
                                     <td>30</td>
                                 </tr>
+                                <tr>
+                                    <td>Apple</td>
+                                    <td>40</td>
+                                </tr>
                                 </tbody>
                                 <tfoot>
                                 <tr>
