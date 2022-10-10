@@ -76,24 +76,37 @@ try {
 
 $(document).ready(function () {
   var createCompanyForm = $('#companyFrom');
+  var editCompanyForm = $('#companyFromEdit');
   var csrf = $('meta[name="csrf-token"]').attr('content');
   var alertsClose = $('.close');
   createCompanyForm.on('submit', function (event) {
     event.preventDefault();
     var METHOD = 'POST';
-    var URL = createCompanyForm.attr('action');
+    var URL = $(this).attr('action');
     var headers = {
       'X-CSRF-TOKEN': csrf
     };
-    var data = createCompanyForm.serializeArray().reduce(function (obj, item) {
+    var data = $(this).serializeArray().reduce(function (obj, item) {
       obj[item.name] = item.value;
       return obj;
     }, {});
     ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
   });
+  editCompanyForm.on('submit', function (event) {
+    event.preventDefault();
+    var METHOD = 'PUT';
+    var URL = $(this).attr('action');
+    var headers = {
+      'X-CSRF-TOKEN': csrf
+    };
+    var data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    ajaxRequest(METHOD, headers, URL, data, editCompanySuccess, createCompanyError);
+  });
 
   function createCompanySuccess(response) {
-    createCompanyForm[0].reset();
     var successAlert = $('#successAlert');
 
     if (successAlert) {
@@ -107,6 +120,10 @@ $(document).ready(function () {
     if (errorAlert) {
       errorAlert.toggleClass('hidden');
     }
+  }
+
+  function editCompanySuccess(response) {
+    location.href = location.href;
   }
 
   alertsClose.on('click', function () {
