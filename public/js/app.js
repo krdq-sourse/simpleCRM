@@ -27,6 +27,10 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! admin-lte */ "./node_modules/admin-lte/dist/js/adminlte.min.js");
 
+__webpack_require__(/*! ./requests */ "./resources/js/requests.js");
+
+__webpack_require__(/*! ./company */ "./resources/js/company.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -44,7 +48,24 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 try {
   window.Popper = (__webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"]);
-  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+  window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //добавил свою функцию в jq
+
+  window.$.fn.serializeFormJSON = function () {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function () {
+      if (o[this.name]) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+
+        o[this.name].push(this.value || '');
+      } else {
+        o[this.name] = this.value || '';
+      }
+    });
+    return o;
+  };
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
@@ -61,6 +82,56 @@ try {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/company.js":
+/*!*********************************!*\
+  !*** ./resources/js/company.js ***!
+  \*********************************/
+/***/ (() => {
+
+$(document).ready(function () {
+  var createCompanyForm = $('#companyFrom');
+  var csrf = $('meta[name="csrf-token"]').attr('content');
+  createCompanyForm.on('submit', function (event) {
+    event.preventDefault();
+    var METHOD = 'POST';
+    var URL = createCompanyForm.getAttribute('action');
+    var headers = {
+      'X-CSRF-TOKEN': csrf
+    };
+    var data = createCompanyForm.serializeFormJSON();
+    ajaxRequest(METHOD, headers, URL, data);
+  });
+
+  function createCompanySuccess(data) {
+    createCompanyForm[0].reset();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/requests.js":
+/*!**********************************!*\
+  !*** ./resources/js/requests.js ***!
+  \**********************************/
+/***/ (() => {
+
+function ajaxRequest(method, headers, url, data, _success, _error) {
+  $.ajax({
+    type: method,
+    headers: headers,
+    url: url,
+    data: data,
+    success: function success(response) {
+      _success(response);
+    },
+    error: function error(response) {
+      _error(response);
+    }
+  });
+}
 
 /***/ }),
 

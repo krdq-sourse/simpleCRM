@@ -8,7 +8,24 @@ window._ = require('lodash');
 
 try {
     window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+    window.$      = window.jQuery = require('jquery');
+
+    //добавил свою функцию в jq
+    window.$.fn.serializeFormJSON = function () {
+        let o = {};
+        let a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 
     require('bootstrap');
 } catch (e) {

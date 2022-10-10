@@ -1,10 +1,8 @@
-function postRequest(data, csrf, url, success, error)
+function ajaxRequest(method, headers, url, data, success, error)
 {
     $.ajax({
-        type   : "POST",
-        headers: {
-            'X-CSRF-TOKEN': csrf,
-        },
+        type   : method,
+        headers: headers,
         url    : url,
         data   : data,
         success: function (response) {
