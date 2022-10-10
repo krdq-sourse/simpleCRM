@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCompanyRequest;
+use App\Models\Company;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
 use App\Models\User;
 use http\Env\Response;
@@ -52,9 +54,18 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCompanyRequest $request)
     {
-        //
+        try {
+            $this->companyRepository->create($request->only('name'));
+            $response = $this->respondSuccess(
+                __('messages.saved_successfully')
+            );
+        } catch (Exception $e) {
+            $response = $this->respondWentWrong($e);
+        }
+
+        return $response;
     }
 
     /**

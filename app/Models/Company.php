@@ -11,6 +11,10 @@ class Company extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'name'
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

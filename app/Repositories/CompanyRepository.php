@@ -17,6 +17,11 @@ class CompanyRepository implements CompanyRepositoryInterfaces
         return Company::all();
     }
 
+    /**
+     * @param User $user
+     *
+     * @return mixed
+     */
     public function getByUser(User $user)
     {
         return Company::whereHas(
@@ -25,5 +30,37 @@ class CompanyRepository implements CompanyRepositoryInterfaces
                 $query->where('id', $user->id);
             },
         )->toSql();
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function save(Company $company)
+    {
+        $company->save();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function getById(int $id)
+    {
+        return Company::find($id);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+        $company = Company::find($id);
+        $company->delete();
+    }
+
+    public function create(array $data)
+    {
+        Company::create($data);
     }
 }
