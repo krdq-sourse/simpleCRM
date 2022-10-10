@@ -19,6 +19,7 @@
         "vite": "^3.0.0"
     },
     "dependencies": {
+        "jq": "^1.7.2",
         "laravel-mix": "^6.0.49"
     }
 }
