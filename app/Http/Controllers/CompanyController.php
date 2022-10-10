@@ -40,7 +40,7 @@ class CompanyController extends Controller
     {
         $user      = User::find($id);
         $companies = $this->companyRepository->getByUser($user);
-        return response($companies->toJson(), 200);
+        return response($companies->toJson(JSON_UNESCAPED_UNICODE), 200);
     }
 
     /**
@@ -79,7 +79,8 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        $company = $this->companyRepository->getById($id);
+        return response($company->toJson(JSON_UNESCAPED_UNICODE), 200);
     }
 
     /**
