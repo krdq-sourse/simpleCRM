@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
+use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
 use App\Models\User;
@@ -88,11 +89,13 @@ class CompanyController extends Controller
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function edit($id)
     {
-        //
+        $company = $this->companyRepository->getById($id);
+
+        return view('company.edit')->with(['company' => $company]);
     }
 
     /**
@@ -103,9 +106,18 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+        try {
+            $company = $this->companyRepository->getById($id);
+            $company->update($validated);
+            $response = $this->respondSuccess(__('messages.updated_successfully'));
+        } catch (Exception $exception) {
+            $response = $this->respondWentWrong($exception);
+        }
+
+        return $response;
     }
 
     /**
