@@ -26,6 +26,6 @@ Route::resource('client', UserController::class);
 Route::get('get-companies', [CompanyController::class, 'viewIndexAction'])
     ->name('company.view.index');
 Route::get('get-clients', [UserController::class, 'viewIndexAction'])
-    ->name('company.view.index');
+    ->name('client.view.index');
 
 Auth::routes();
