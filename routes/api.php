@@ -21,8 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/auth/register', [AuthController::class, 'createUser']);
-Route::post('/auth/login', [AuthController::class, 'loginUser']);
+Route::post('/auth/register', [AuthController::class, 'createUser'])->name('api.register');
+Route::post('/auth/login', [AuthController::class, 'loginUser'])->name('api.login');
 Route::apiResource('company', CompanyController::class)->middleware('auth:sanctum');
-Route::get('get-client-companies', [CompanyController::class, 'getClientCompanies'])->middleware('auth:sanctum');
+Route::get('get-client-companies', [CompanyController::class, 'getClientCompanies'])
+    ->name('get-client-companies')->middleware('auth:sanctum');
 Route::apiResource('client', UserController::class)->middleware('auth:sanctum');
