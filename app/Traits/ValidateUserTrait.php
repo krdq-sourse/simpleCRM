@@ -17,7 +17,7 @@ trait ValidateUserTrait
         return Validator::make(
             $request->all(),
             [
-                'name'     => 'required',
+                'name'     => 'required|max:255',
                 'email'    => 'required|email|unique:users,email',
                 'password' => 'required',
             ]
@@ -39,4 +39,21 @@ trait ValidateUserTrait
             ]
         );
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Validation\Validator
+     */
+    private function validateUserUpdate(Request $request)
+    {
+        return Validator::make(
+            $request->all(),
+            [
+                'name'  => 'required|max:255',
+                'email' => 'required|email',
+            ]
+        );
+    }
+
 }

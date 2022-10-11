@@ -13,6 +13,11 @@ class UserController extends Controller
 
     private UserRepositoryInterfaces $userRepository;
 
+    /**
+     * @param UserRepositoryInterfaces $userRepository
+     *
+     * @return void
+     */
     public function __construct(UserRepositoryInterfaces $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -104,11 +109,11 @@ class UserController extends Controller
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //todo сделать вью
+        return view('client.edit');
     }
 
     /**
@@ -122,7 +127,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $validateUser = $this->validateUserCreate($request);
+            $validateUser = $this->validateUserUpdate($request);
             if ($validateUser->fails()) {
                 return $this->respondWithError($validateUser->errors());
             }

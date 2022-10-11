@@ -16,20 +16,22 @@
                                 <tr>
                                     <th>id</th>
                                     <th>{{__('Название компании')}}</th>
+                                    <th>email</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($companies as $company)
+                                @foreach($users as $user)
                                     <tr>
-                                        <td>{{$company->id}}</td>
-                                        <td>{{$company->title}}</td>
-                                        <td style="max-width: 20px"><a href="{{route('company.edit',$company->id)}}"
+                                        <td>{{$user->id}}</td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{$user->email}}</td>
+                                        <td style="max-width: 20px"><a href="{{route('client.edit',$user->id)}}"
                                                                        class="btn btn-app">
                                                 <i class="fas fa-edit"></i>
                                                 {{__('Редактировать')}}
                                             </a></td>
                                         <td style="max-width: 20px"><a class="btn btn-app btn-delete_company"
-                                                                       data-action="{{route('company.destroy', $company->id)}}">
+                                                                       data-action="{{route('client.destroy', $user->id)}}">
                                                 <i class="fas fa-trash"></i>
                                                 {{__('Удалить')}}
                                             </a></td>
@@ -40,6 +42,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>{{__('Название компании')}}</th>
+                                    <th>email</th>
                                 </tr>
                                 </tfoot>
                             </table>

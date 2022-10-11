@@ -15,24 +15,28 @@
 
                     <div id = 'successAlert' class="hidden alert alert-success alert-dismissible">
                         <button type="button" class="close" aria-hidden="true">×</button>
-                        <h5><i class="icon fas fa-check"></i> {{__('Компания успешно создана')}}</h5>
+                        <h5><i class="icon fas fa-check"></i> {{__('Клиент успешно изменен')}}</h5>
                         Success alert preview. This alert is dismissable.
                     </div>
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">{{__('Редактирование')}}</h3>
+                            <h3 class="card-title">{{__('Изменение данных клиента')}}</h3>
                         </div>
-                        <form id='companyFromEdit' action="{{route('company.update', $company->id)}}">
-                            {{method_field('put')}}
+                        <form id='userFrom' action="{{route('client.update')}}">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">{{__('Название компании')}}</label>
-                                    <input name="title" type="text" value="{{$company->title}}" class="form-control" id="exampleInputEmail1"
-                                           placeholder="{{__('Название компании')}}">
+                                    <label for="exampleInputEmail1">{{__('Имя')}}</label>
+                                    <input name="name" type="text" class="form-control" id="exampleInputEmail1"
+                                           placeholder="{{__('Имя')}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">{{__('email')}}</label>
+                                    <input name="email" type="email" class="form-control" id="exampleInputEmail1"
+                                           placeholder="{{__('email')}}">
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">{{__('Изменмить')}}</button>
+                                <button type="submit" class="btn btn-primary">{{__('Изменить')}}</button>
                             </div>
                         </form>
                     </div>
