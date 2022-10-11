@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
-use App\Traits\CreateUserTrait;
+use App\Traits\ValidateUserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    use CreateUserTrait;
+    use ValidateUserTrait;
 
     private UserRepositoryInterfaces $userRepository;
 
@@ -54,7 +54,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $validateUser = $this->validateUser($request);
+            $validateUser = $this->validateUserCreate($request);
 
             if ($validateUser->fails()) {
                 return $this->respondWithError($validateUser->errors());

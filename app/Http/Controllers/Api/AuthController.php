@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Traits\CreateUserTrait;
+use App\Traits\ValidateUserTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    use CreateUserTrait;
+    use ValidateUserTrait;
 
     private UserRepositoryInterfaces $userRepository;
 
@@ -29,7 +29,7 @@ class AuthController extends Controller
     public function createUser(Request $request)
     {
         try {
-            $validateUser = $this->validateUser($request);
+            $validateUser = $this->validateUserCreate($request);
 
             if ($validateUser->fails()) {
                 return $this->respondWithError($validateUser->errors());
@@ -62,13 +62,7 @@ class AuthController extends Controller
     public function loginUser(Request $request)
     {
         try {
-            $validateUser = Validator::make(
-                $request->all(),
-                [
-                    'email'    => 'required|email',
-                    'password' => 'required',
-                ]
-            );
+            $validateUser = $this->validateUserLogin($request);
 
             if ($validateUser->fails()) {
                 return $this->respondWithError($validateUser->errors());
