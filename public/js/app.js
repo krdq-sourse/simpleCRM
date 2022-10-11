@@ -31,6 +31,8 @@ __webpack_require__(/*! ./requests */ "./resources/js/requests.js");
 
 __webpack_require__(/*! ./company */ "./resources/js/company.js");
 
+__webpack_require__(/*! ./client */ "./resources/js/client.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -65,6 +67,67 @@ try {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/client.js":
+/*!********************************!*\
+  !*** ./resources/js/client.js ***!
+  \********************************/
+/***/ (() => {
+
+$(document).ready(function () {
+  var createUserForm = $('#userFrom');
+  var csrf = $('meta[name="csrf-token"]').attr('content');
+  var editUserForm = $('#companyFromEdit');
+  var alertsClose = $('.close');
+  createUserForm.on('submit', function (event) {
+    event.preventDefault();
+    var METHOD = 'POST';
+    var URL = $(this).attr('action');
+    var headers = {
+      'X-CSRF-TOKEN': csrf
+    };
+    var data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
+  });
+  editUserForm.on('submit', function (event) {
+    event.preventDefault();
+    var METHOD = 'PUT';
+    var URL = $(this).attr('action');
+    var headers = {
+      'X-CSRF-TOKEN': csrf
+    };
+    var data = $(this).serializeArray().reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
+  });
+
+  function createSuccess(response) {
+    var successAlert = $('#successAlert');
+
+    if (successAlert) {
+      successAlert.toggleClass('hidden');
+    }
+  }
+
+  function createError(response) {
+    var errorAlert = $('#errorAlert');
+
+    if (errorAlert) {
+      errorAlert.toggleClass('hidden');
+    }
+  }
+
+  alertsClose.on('click', function () {
+    $(this).parent().toggleClass('hidden');
+  });
+});
 
 /***/ }),
 

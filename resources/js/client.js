@@ -1,11 +1,28 @@
 $(document).ready(function () {
-    const createUserForm   = $('#userFrom');
-    const csrf             = $('meta[name="csrf-token"]').attr('content');
-    const alertsClose      = $('.close');
+    const createUserForm = $('#userFrom');
+    const csrf           = $('meta[name="csrf-token"]').attr('content');
+    const editUserForm   = $('#companyFromEdit');
+    const alertsClose    = $('.close');
 
     createUserForm.on('submit', function (event) {
         event.preventDefault();
         const METHOD = 'POST';
+        const URL    = $(this).attr('action');
+
+        let headers = {
+            'X-CSRF-TOKEN': csrf,
+        };
+        let data    = $(this).serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+
+        ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
+    });
+
+    editUserForm.on('submit', function (event) {
+        event.preventDefault();
+        const METHOD = 'PUT';
         const URL    = $(this).attr('action');
 
         let headers = {

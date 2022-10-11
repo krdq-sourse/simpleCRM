@@ -113,7 +113,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('client.edit');
+        $user = $this->userRepository->getById($id);
+        if (!$user) {
+            abort(404);
+        }
+        return view('client.edit')->with(['user' => $user]);
     }
 
     /**
