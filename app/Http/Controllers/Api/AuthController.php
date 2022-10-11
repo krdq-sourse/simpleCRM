@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Traits\CreateUserTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    use CreateUserTrait;
+
     private UserRepositoryInterfaces $userRepository;
 
     public function __construct(UserRepositoryInterfaces $userRepository)
@@ -26,14 +29,7 @@ class AuthController extends Controller
     public function createUser(Request $request)
     {
         try {
-            $validateUser = Validator::make(
-                $request->all(),
-                [
-                    'name'     => 'required',
-                    'email'    => 'required|email|unique:users,email',
-                    'password' => 'required',
-                ]
-            );
+            $validateUser = $this->validateUser($request);
 
             if ($validateUser->fails()) {
                 return $this->respondWithError($validateUser->errors());

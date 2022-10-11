@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
+use App\Traits\CreateUserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    use CreateUserTrait;
+
     private UserRepositoryInterfaces $userRepository;
 
     public function __construct(UserRepositoryInterfaces $userRepository)
@@ -43,15 +47,32 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param Request $request
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        // todo сделать реквест
+        try {
+            $validateUser = $this->validateUser($request);
+
+            if ($validateUser->fails()) {
+                return $this->respondWithError($validateUser->errors());
+            }
+
+            $validated             = $validateUser->validated();
+            $validated['password'] = Hash::make($validated['password']);
+
+            $this->userRepository->create($validated);
+
+            $response = $this->respondSuccess(
+                __('user.created_successfully'),
+            );
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
+        }
+
+        return $response;
     }
 
     /**

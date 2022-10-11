@@ -1,10 +1,9 @@
 $(document).ready(function () {
-    const createCompanyForm = $('#userFrom');
-    const csrf              = $('meta[name="csrf-token"]').attr('content');
-    const alertsClose       = $('.close');
-    const deleteCompanyBnt  = $('.btn-delete_company');
+    const createUserForm   = $('#userFrom');
+    const csrf             = $('meta[name="csrf-token"]').attr('content');
+    const alertsClose      = $('.close');
 
-    createCompanyForm.on('submit', function (event) {
+    createUserForm.on('submit', function (event) {
         event.preventDefault();
         const METHOD = 'POST';
         const URL    = $(this).attr('action');
@@ -17,6 +16,24 @@ $(document).ready(function () {
             return obj;
         }, {});
 
-        ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
+        ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
+    });
+
+    function createSuccess(response) {
+        const successAlert = $('#successAlert');
+        if (successAlert) {
+            successAlert.toggleClass('hidden');
+        }
+    }
+
+    function createError(response) {
+        const errorAlert = $('#errorAlert');
+        if (errorAlert) {
+            errorAlert.toggleClass('hidden');
+        }
+    }
+
+    alertsClose.on('click', function () {
+        $(this).parent().toggleClass('hidden');
     });
 });
