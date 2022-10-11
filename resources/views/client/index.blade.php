@@ -25,12 +25,12 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
-                                        <td style="max-width: 20px"><a href="{{route('client.edit',$user->id)}}"
+                                        <td style="width: 25px"><a href="{{route('client.edit',$user->id)}}"
                                                                        class="btn btn-app">
                                                 <i class="fas fa-edit"></i>
                                                 {{__('Редактировать')}}
                                             </a></td>
-                                        <td style="max-width: 20px"><a class="btn btn-app btn-delete"
+                                        <td style="width: 25px"><a class="btn btn-app btn-delete"
                                                                        data-action="{{route('client.destroy', $user->id)}}">
                                                 <i class="fas fa-trash"></i>
                                                 {{__('Удалить')}}
@@ -46,7 +46,7 @@
                                 </tr>
                                 </tfoot>
                             </table>
-                            {{ $companies->links() }}
+                            {{ $users->links() }}
 
                         </div>
                         <!-- /.card-body -->

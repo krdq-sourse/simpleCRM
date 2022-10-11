@@ -12,7 +12,6 @@ class CompanyController extends Controller
 {
     private CompanyRepositoryInterfaces $companyRepository;
     private UserRepositoryInterfaces $userRepository;
-    private const DEFAULT_PAGINATION_VALUE = 10;
 
     /**
      * @param CompanyRepositoryInterfaces $companyRepository

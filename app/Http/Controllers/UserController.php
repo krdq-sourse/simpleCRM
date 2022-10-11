@@ -20,6 +20,7 @@ class UserController extends Controller
      */
     public function __construct(UserRepositoryInterfaces $userRepository)
     {
+        $this->middleware('auth');
         $this->userRepository = $userRepository;
     }
 
@@ -39,6 +40,17 @@ class UserController extends Controller
             : $this->userRepository->all();
 
         return response($user->toJson(), 200);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function viewIndexAction(Request $request)
+    {
+        $users = $this->userRepository->paginate(self::DEFAULT_PAGINATION_VALUE);
+        return view('client.index', ['users' => $users]);
     }
 
     /**

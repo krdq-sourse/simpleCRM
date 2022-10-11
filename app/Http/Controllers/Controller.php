@@ -14,6 +14,7 @@ class Controller extends BaseController
     use ValidatesRequests;
 
     protected $statusCode;
+    protected const DEFAULT_PAGINATION_VALUE = 10;
 
     public function getStatusCode()
     {

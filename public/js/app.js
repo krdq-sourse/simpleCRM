@@ -141,7 +141,7 @@ $(document).ready(function () {
   var editCompanyForm = $('#companyFromEdit');
   var csrf = $('meta[name="csrf-token"]').attr('content');
   var alertsClose = $('.close');
-  var deleteCompanyBnt = $('.btn-delete_company');
+  var deleteBnt = $('.btn-delete');
   createCompanyForm.on('submit', function (event) {
     event.preventDefault();
     var METHOD = 'POST';
@@ -153,7 +153,7 @@ $(document).ready(function () {
       obj[item.name] = item.value;
       return obj;
     }, {});
-    ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
+    ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
   });
   editCompanyForm.on('submit', function (event) {
     event.preventDefault();
@@ -166,18 +166,22 @@ $(document).ready(function () {
       obj[item.name] = item.value;
       return obj;
     }, {});
-    ajaxRequest(METHOD, headers, URL, data, editCompanySuccess, createCompanyError);
+    ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
   });
 
-  function createCompanySuccess(response) {
-    var successAlert = $('#successAlert');
+  function createSuccess(response) {
+    if (response.success) {
+      var successAlert = $('#successAlert');
 
-    if (successAlert) {
-      successAlert.toggleClass('hidden');
+      if (successAlert) {
+        successAlert.toggleClass('hidden');
+      }
+    } else {
+      createError(response);
     }
   }
 
-  function createCompanyError(response) {
+  function createError(response) {
     var errorAlert = $('#errorAlert');
 
     if (errorAlert) {
@@ -185,14 +189,10 @@ $(document).ready(function () {
     }
   }
 
-  function editCompanySuccess(response) {
-    location.href = location.href;
-  }
-
   alertsClose.on('click', function () {
     $(this).parent().toggleClass('hidden');
   });
-  deleteCompanyBnt.on('click', function () {
+  deleteBnt.on('click', function () {
     var METHOD = 'DELETE';
     var URL = $(this).attr('data-action');
     var data = {};
@@ -200,7 +200,11 @@ $(document).ready(function () {
       'X-CSRF-TOKEN': csrf
     };
     ajaxRequest(METHOD, headers, URL, data, function (response) {
-      location.href = location.href;
+      if (response.success) {
+        location.href = location.href;
+      } else {
+        somethingWentWrong(response);
+      }
     }, somethingWentWrong);
   });
 
