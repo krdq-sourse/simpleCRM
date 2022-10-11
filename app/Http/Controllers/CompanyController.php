@@ -7,21 +7,27 @@ use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterfaces;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
     private CompanyRepositoryInterfaces $companyRepository;
+    private UserRepositoryInterfaces $userRepository;
 
     /**
      * @param CompanyRepositoryInterfaces $companyRepository
+     * @param UserRepositoryInterfaces    $userRepository
      *
      * @return void
      */
-    public function __construct(CompanyRepositoryInterfaces $companyRepository)
-    {
+    public function __construct(
+        CompanyRepositoryInterfaces $companyRepository,
+        UserRepositoryInterfaces $userRepository
+    ) {
         $this->middleware('auth');
         $this->companyRepository = $companyRepository;
+        $this->userRepository    = $userRepository;
     }
 
     public function index(Request $request)
@@ -39,8 +45,9 @@ class CompanyController extends Controller
 
     public function getClientCompanies($id)
     {
-        $user      = User::find($id);
+        $user      = $this->userRepository->getById($id);
         $companies = $this->companyRepository->getByUser($user);
+
         return response($companies->toJson(JSON_UNESCAPED_UNICODE), 200);
     }
 
@@ -81,6 +88,7 @@ class CompanyController extends Controller
     public function show($id)
     {
         $company = $this->companyRepository->getById($id);
+
         return response($company->toJson(JSON_UNESCAPED_UNICODE), 200);
     }
 
@@ -113,7 +121,7 @@ class CompanyController extends Controller
             $company = $this->companyRepository->getById($id);
             $company->update($validated);
             $response = $this->respondSuccess(__('messages.updated_successfully'));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $response = $this->respondWentWrong($exception);
         }
 
@@ -132,9 +140,10 @@ class CompanyController extends Controller
         try {
             $this->companyRepository->delete($id);
             $response = $this->respondSuccess(__('messages.deleted_successfully'));
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $response = $this->respondWentWrong($exception);
         }
+
         return $response;
     }
 }
