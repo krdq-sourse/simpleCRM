@@ -2,10 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Company;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -20,8 +17,9 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' =>  User::inRandomOrder()->first()->id,
-            'company_id' => Company::inRandomOrder()->first()->id,
+            // MODEL::inRandomOrder()->first()->id, не вариант по понятным причинам
+            'user_id' =>  fake()->numberBetween(1, 10000),
+            'company_id' => fake()->numberBetween(1, 10000),
         ];
     }
 }
