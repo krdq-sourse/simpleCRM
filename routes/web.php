@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 
@@ -21,6 +22,7 @@ use App\Http\Controllers\CompanyController;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('company', CompanyController::class);
+Route::resource('client', UserController::class);
 Route::get('get-companies', [CompanyController::class, 'viewIndexAction'])
     ->name('company.view.index');
 

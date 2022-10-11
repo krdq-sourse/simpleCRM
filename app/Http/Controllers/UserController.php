@@ -35,11 +35,11 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function create()
     {
-        //todo сделать вью
+        return view('client.create');
     }
 
     /**
@@ -104,8 +104,8 @@ class UserController extends Controller
         try {
             $this->userRepository->delete($id);
             $response = $this->respondSuccess(__('user.deleted_successfully'));
-        } catch (\Exception $exception) {
-            $response = $this->respondWentWrong($exception);
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
         }
         return $response;
     }
