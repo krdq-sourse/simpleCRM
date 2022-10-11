@@ -129,6 +129,12 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->companyRepository->delete($id);
+            $response = $this->respondSuccess(__('messages.deleted_successfully'));
+        } catch (Exception $exception) {
+            $response = $this->respondWentWrong($exception);
+        }
+        return $response;
     }
 }
