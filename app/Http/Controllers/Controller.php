@@ -27,11 +27,11 @@ class Controller extends BaseController
         );
     }
 
-    public function respondWentWrong($exception = null)
+    public function respondWentWrong($throwable = null)
     {
 
-        $message = (config('app.debug') && is_object($exception))
-            ? "File:" . $exception->getFile() . "Line:" . $exception->getLine() . "Message:" . $exception->getMessage()
+        $message = (config('app.debug') && is_object($throwable))
+            ? "File:" . $throwable->getFile() . "Line:" . $throwable->getLine() . "Message:" . $throwable->getMessage()
             : __('messages.something_went_wrong');
 
         return $this->setStatusCode(200)
@@ -53,5 +53,11 @@ class Controller extends BaseController
     public function respond($data)
     {
         return response()->json($data);
+    }
+
+    private function setStatusCode(int $int)
+    {
+        $this->statusCode = $int;
+        return $this;
     }
 }

@@ -50,8 +50,8 @@ class AuthController extends Controller
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
                 ]
             );
-        } catch (\Exception $exception) {
-            $response = $this->respondWentWrong($exception);
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
         }
 
         return $response;
@@ -92,8 +92,8 @@ class AuthController extends Controller
                     'token' => $user->createToken("API TOKEN")->plainTextToken,
                 ]
             );
-        } catch (\Exception $exception) {
-            $response = $this->respondWentWrong($exception);
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
         }
 
         return $response;

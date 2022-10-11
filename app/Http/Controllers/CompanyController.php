@@ -92,10 +92,19 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //todo !
-        $company = $this->companyRepository->getById((int)$id);
+        try {
+            $company  = $this->companyRepository->getById($id);
+            $response = $this->respondSuccess(
+                __('company.show_successfully'),
+                [
+                    'data' => $company->toJson(JSON_UNESCAPED_UNICODE),
+                ]
+            );
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
+        }
 
-        return response($company->toJson(JSON_UNESCAPED_UNICODE), 200);
+        return $response;
     }
 
     /**
@@ -127,8 +136,8 @@ class CompanyController extends Controller
             $company = $this->companyRepository->getById($id);
             $company->update($validated);
             $response = $this->respondSuccess(__('messages.updated_successfully'));
-        } catch (\Exception $exception) {
-            $response = $this->respondWentWrong($exception);
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
         }
 
         return $response;
@@ -146,8 +155,8 @@ class CompanyController extends Controller
         try {
             $this->companyRepository->delete($id);
             $response = $this->respondSuccess(__('messages.deleted_successfully'));
-        } catch (\Exception $exception) {
-            $response = $this->respondWentWrong($exception);
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
         }
 
         return $response;
