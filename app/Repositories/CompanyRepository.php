@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Client;
 use App\Models\Company;
 use App\Models\User;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
@@ -61,7 +60,7 @@ class CompanyRepository implements CompanyRepositoryInterfaces
 
     public function create(array $data)
     {
-        Company::create($data);
+        return Company::create($data);
     }
 
     public function paginate($perPage)
