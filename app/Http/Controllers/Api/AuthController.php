@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
 use Illuminate\Http\Request;
@@ -37,11 +36,7 @@ class AuthController extends Controller
             );
 
             if ($validateUser->fails()) {
-                return response()->json([
-                    'status'  => false,
-                    'message' => __('validation.error'),
-                    'errors'  => $validateUser->errors(),
-                ], 401);
+                return $this->respondWithError($validateUser->errors());
             }
 
             $validated             = $validateUser->validated();
@@ -49,17 +44,17 @@ class AuthController extends Controller
 
             $user = $this->userRepository->create($validated);
 
-            return response()->json([
-                'status'  => true,
-                'message' => __('user.created_successfully'),
-                'token'   => $user->createToken("API TOKEN")->plainTextToken,
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status'  => false,
-                'message' => $th->getMessage(),
-            ], 500);
+            $response = $this->respondSuccess(
+                __('user.created_successfully'),
+                [
+                    'token' => $user->createToken("API TOKEN")->plainTextToken,
+                ]
+            );
+        } catch (\Exception $exception) {
+            $response = $this->respondWentWrong($exception);
         }
+
+        return $response;
     }
 
 
@@ -80,34 +75,27 @@ class AuthController extends Controller
             );
 
             if ($validateUser->fails()) {
-                return response()->json([
-                    'status'  => false,
-                    'message' => 'user.validation_error',
-                    'errors'  => $validateUser->errors(),
-                ], 401);
+                return $this->respondWithError($validateUser->errors());
             }
 
             $validated = $validateUser->validated();
 
             if (!Auth::attempt($validated)) {
-                return response()->json([
-                    'status'  => false,
-                    'message' => __('user.login_error'),
-                ], 401);
+                return $this->respondWithError(__('user.login_error'));
             }
 
             $user = $this->userRepository->getUserByEmail($validated['email']);
 
-            return response()->json([
-                'status'  => true,
-                'message' => 'user.login_successfully',
-                'token'   => $user->createToken("API TOKEN")->plainTextToken,
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status'  => false,
-                'message' => $th->getMessage(),
-            ], 500);
+            $response = $this->respondSuccess(
+                __('user.login_successfully'),
+                [
+                    'token' => $user->createToken("API TOKEN")->plainTextToken,
+                ]
+            );
+        } catch (\Exception $exception) {
+            $response = $this->respondWentWrong($exception);
         }
+
+        return $response;
     }
 }
