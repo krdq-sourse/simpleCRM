@@ -132,6 +132,9 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = $this->companyRepository->getById($id);
+        if (!$company) {
+            abort(404);
+        }
 
         return view('company.edit')->with(['company' => $company]);
     }
