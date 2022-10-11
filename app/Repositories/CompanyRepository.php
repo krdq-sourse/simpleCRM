@@ -28,7 +28,7 @@ class CompanyRepository implements CompanyRepositoryInterfaces
             function ($query) use ($user) {
                 $query->where('id', $user->id);
             },
-        )->toSql();
+        )->get();
     }
 
     /**

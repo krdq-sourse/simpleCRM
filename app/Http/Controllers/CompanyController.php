@@ -62,12 +62,23 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function getClientCompanies($id)
+    public function getClientCompanies(Request $request)
     {
-        $user      = $this->userRepository->getById($id);
-        $companies = $this->companyRepository->getByUser($user);
+        try {
+            $id = $request->get('client_id');
+            $user      = $this->userRepository->getById($id);
+            $companies = $this->companyRepository->getByUser($user);
+            $response = $this->respondSuccess(
+                __('company.get-client-companies_successfully'),
+                [
+                    'data' => $companies->toJson(JSON_UNESCAPED_UNICODE),
+                ]
+            );
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
+        }
 
-        return response($companies->toJson(JSON_UNESCAPED_UNICODE), 200);
+        return $response;
     }
 
     /**
