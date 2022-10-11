@@ -28,7 +28,7 @@
                                                 <i class="fas fa-edit"></i>
                                                 {{__('Редактировать')}}
                                             </a></td>
-                                        <td style="max-width: 20px"><a class="btn btn-app btn-delete_company"
+                                        <td style="max-width: 20px"><a class="btn btn-app btn-delete"
                                                                        data-action="{{route('company.destroy', $company->id)}}">
                                                 <i class="fas fa-trash"></i>
                                                 {{__('Удалить')}}

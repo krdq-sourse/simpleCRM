@@ -3,7 +3,7 @@ $(document).ready(function () {
     const editCompanyForm   = $('#companyFromEdit');
     const csrf              = $('meta[name="csrf-token"]').attr('content');
     const alertsClose       = $('.close');
-    const deleteCompanyBnt  = $('.btn-delete_company');
+    const deleteBnt         = $('.btn-delete');
 
     createCompanyForm.on('submit', function (event) {
         event.preventDefault();
@@ -18,7 +18,7 @@ $(document).ready(function () {
             return obj;
         }, {});
 
-        ajaxRequest(METHOD, headers, URL, data, createCompanySuccess, createCompanyError);
+        ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
     });
 
     editCompanyForm.on('submit', function (event) {
@@ -34,36 +34,37 @@ $(document).ready(function () {
             return obj;
         }, {});
 
-        ajaxRequest(METHOD, headers, URL, data, editCompanySuccess, createCompanyError);
+        ajaxRequest(METHOD, headers, URL, data, createSuccess, createError);
     });
 
-    function createCompanySuccess(response) {
-        const successAlert = $('#successAlert');
-        if (successAlert) {
-            successAlert.toggleClass('hidden');
+    function createSuccess(response) {
+        if (response.success) {
+            const successAlert = $('#successAlert');
+            if (successAlert) {
+                successAlert.toggleClass('hidden');
+            }
+        } else {
+            createError(response);
         }
     }
 
-    function createCompanyError(response) {
+    function createError(response) {
         const errorAlert = $('#errorAlert');
         if (errorAlert) {
             errorAlert.toggleClass('hidden');
         }
     }
 
-    function editCompanySuccess(response) {
-        location.href = location.href;
-    }
 
     alertsClose.on('click', function () {
         $(this).parent().toggleClass('hidden');
     });
 
-    deleteCompanyBnt.on('click', function () {
+    deleteBnt.on('click', function () {
         const METHOD = 'DELETE';
         const URL    = $(this).attr('data-action');
         let data     = {};
-        let headers = {
+        let headers  = {
             'X-CSRF-TOKEN': csrf,
         };
 
@@ -73,7 +74,11 @@ $(document).ready(function () {
             URL,
             data,
             function (response) {
-                location.href = location.href
+                if (response.success) {
+                    location.href = location.href
+                } else {
+                    somethingWentWrong(response)
+                }
             },
             somethingWentWrong
         )
