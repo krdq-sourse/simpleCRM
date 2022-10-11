@@ -20,10 +20,20 @@
                                 </thead>
                                 <tbody>
                                 @foreach($companies as $company)
-                                        <tr onclick="location.href = '{{route('company.edit',$company->id)}}'">
-                                            <td>{{$company->id}}</td>
-                                            <td>{{$company->title}}</td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{$company->id}}</td>
+                                        <td>{{$company->title}}</td>
+                                        <td style="max-width: 20px"><a href="{{route('company.edit',$company->id)}}"
+                                                                       class="btn btn-app">
+                                                <i class="fas fa-edit"></i>
+                                                {{__('Редактировать')}}
+                                            </a></td>
+                                        <td style="max-width: 20px"><a class="btn btn-app btn-delete_company"
+                                                                       data-action="{{route('company.destroy', $company->id)}}">
+                                                <i class="fas fa-trash"></i>
+                                                {{__('Удалить')}}
+                                            </a></td>
+                                    </tr>
                                 @endforeach
                                 </tbody>
                                 <tfoot>

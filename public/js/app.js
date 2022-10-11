@@ -79,6 +79,7 @@ $(document).ready(function () {
   var editCompanyForm = $('#companyFromEdit');
   var csrf = $('meta[name="csrf-token"]').attr('content');
   var alertsClose = $('.close');
+  var deleteCompanyBnt = $('.btn-delete_company');
   createCompanyForm.on('submit', function (event) {
     event.preventDefault();
     var METHOD = 'POST';
@@ -129,6 +130,21 @@ $(document).ready(function () {
   alertsClose.on('click', function () {
     $(this).parent().toggleClass('hidden');
   });
+  deleteCompanyBnt.on('click', function () {
+    var METHOD = 'DELETE';
+    var URL = $(this).attr('data-action');
+    var data = {};
+    var headers = {
+      'X-CSRF-TOKEN': csrf
+    };
+    ajaxRequest(METHOD, headers, URL, data, function (response) {
+      location.href = location.href;
+    }, somethingWentWrong);
+  });
+
+  function somethingWentWrong(response) {
+    alert('something went wrong -_-');
+  }
 });
 
 /***/ }),

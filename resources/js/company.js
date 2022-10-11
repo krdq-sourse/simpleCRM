@@ -3,6 +3,7 @@ $(document).ready(function () {
     const editCompanyForm   = $('#companyFromEdit');
     const csrf              = $('meta[name="csrf-token"]').attr('content');
     const alertsClose       = $('.close');
+    const deleteCompanyBnt  = $('.btn-delete_company');
 
     createCompanyForm.on('submit', function (event) {
         event.preventDefault();
@@ -57,5 +58,30 @@ $(document).ready(function () {
     alertsClose.on('click', function () {
         $(this).parent().toggleClass('hidden');
     });
+
+    deleteCompanyBnt.on('click', function () {
+        const METHOD = 'DELETE';
+        const URL    = $(this).attr('data-action');
+        let data     = {};
+        let headers = {
+            'X-CSRF-TOKEN': csrf,
+        };
+
+        ajaxRequest(
+            METHOD,
+            headers,
+            URL,
+            data,
+            function (response) {
+                location.href = location.href
+            },
+            somethingWentWrong
+        )
+    })
+
+    function somethingWentWrong(response) {
+        alert('something went wrong -_-');
+
+    }
 });
 
