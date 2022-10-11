@@ -21,5 +21,7 @@ use App\Http\Controllers\CompanyController;
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('company', CompanyController::class);
+Route::get('get-companies', [CompanyController::class, 'viewIndexAction'])
+    ->name('company.view.index');
 
 Auth::routes();

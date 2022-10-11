@@ -12,6 +12,7 @@ class CompanyController extends Controller
 {
     private CompanyRepositoryInterfaces $companyRepository;
     private UserRepositoryInterfaces $userRepository;
+    private const DEFAULT_PAGINATION_VALUE = 10;
 
     /**
      * @param CompanyRepositoryInterfaces $companyRepository
@@ -21,7 +22,7 @@ class CompanyController extends Controller
      */
     public function __construct(
         CompanyRepositoryInterfaces $companyRepository,
-        UserRepositoryInterfaces $userRepository
+        UserRepositoryInterfaces    $userRepository
     ) {
         $this->middleware('auth');
         $this->companyRepository = $companyRepository;
@@ -39,6 +40,12 @@ class CompanyController extends Controller
             : $this->companyRepository->all();
 
         return response($companies->toJson(), 200);
+    }
+
+    public function viewIndexAction(Request $request)
+    {
+        $companies = $this->companyRepository->paginate(self::DEFAULT_PAGINATION_VALUE);
+        return view('company.index', ['companies' => $companies]);
     }
 
     public function getClientCompanies($id)
@@ -85,7 +92,8 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        $company = $this->companyRepository->getById($id);
+        //todo !
+        $company = $this->companyRepository->getById((int)$id);
 
         return response($company->toJson(JSON_UNESCAPED_UNICODE), 200);
     }
