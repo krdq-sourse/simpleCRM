@@ -1,8 +1,7 @@
 $(document).ready(function () {
     const createUserForm = $('#userFrom');
     const csrf           = $('meta[name="csrf-token"]').attr('content');
-    const editUserForm   = $('#companyFromEdit');
-    const alertsClose    = $('.close');
+    const editUserForm   = $('#userFromEdit');
 
     createUserForm.on('submit', function (event) {
         event.preventDefault();
@@ -37,9 +36,13 @@ $(document).ready(function () {
     });
 
     function createSuccess(response) {
-        const successAlert = $('#successAlert');
-        if (successAlert) {
-            successAlert.toggleClass('hidden');
+        if (response.success) {
+            const successAlert = $('#successAlert');
+            if (successAlert) {
+                successAlert.toggleClass('hidden');
+            }
+        } else {
+            createError(response);
         }
     }
 
@@ -49,8 +52,4 @@ $(document).ready(function () {
             errorAlert.toggleClass('hidden');
         }
     }
-
-    alertsClose.on('click', function () {
-        $(this).parent().toggleClass('hidden');
-    });
 });

@@ -22,7 +22,7 @@
                         <div class="card-header">
                             <h3 class="card-title">{{__('Изменение данных клиента')}}</h3>
                         </div>
-                        <form id='userFrom' action="{{route('client.update', $user->id)}}">
+                        <form id='userFromEdit' action="{{route('client.update', $user->id)}}">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">{{__('Имя')}}</label>
