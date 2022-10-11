@@ -22,13 +22,18 @@ class CompanyController extends Controller
      */
     public function __construct(
         CompanyRepositoryInterfaces $companyRepository,
-        UserRepositoryInterfaces    $userRepository
+        UserRepositoryInterfaces $userRepository
     ) {
         $this->middleware('auth');
         $this->companyRepository = $companyRepository;
         $this->userRepository    = $userRepository;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $rowsPerPage = ($request->get('rowsPerPage') > 0)
@@ -42,12 +47,22 @@ class CompanyController extends Controller
         return response($companies->toJson(), 200);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function viewIndexAction(Request $request)
     {
         $companies = $this->companyRepository->paginate(self::DEFAULT_PAGINATION_VALUE);
         return view('company.index', ['companies' => $companies]);
     }
 
+    /**
+     * @param $id
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function getClientCompanies($id)
     {
         $user      = $this->userRepository->getById($id);
@@ -131,8 +146,9 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, $id)
     {
-        $validated = $request->validated();
         try {
+            $validated = $request->validated();
+
             $company = $this->companyRepository->getById($id);
             $company->update($validated);
             $response = $this->respondSuccess(__('messages.updated_successfully'));

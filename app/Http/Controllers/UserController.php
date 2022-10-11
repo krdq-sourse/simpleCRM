@@ -84,8 +84,19 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = $this->userRepository->getById($id);
-        return response($user->toJson(JSON_UNESCAPED_UNICODE), 200);
+        try {
+            $user  = $this->userRepository->getById($id);
+            $response = $this->respondSuccess(
+                __('user.show_successfully'),
+                [
+                    'data' => $user->toJson(JSON_UNESCAPED_UNICODE),
+                ]
+            );
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
+        }
+
+        return $response;
     }
 
     /**
@@ -106,11 +117,23 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param int                      $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //todo сделать реквест
+        try {
+            $validateUser = $this->validateUserCreate($request);
+            if ($validateUser->fails()) {
+                return $this->respondWithError($validateUser->errors());
+            }
+            $company = $this->userRepository->getById($id);
+            $company->update($validateUser->validated());
+            $response = $this->respondSuccess(__('messages.updated_successfully'));
+        } catch (\Throwable $throwable) {
+            $response = $this->respondWentWrong($throwable);
+        }
+
+        return $response;
     }
 
     /**
