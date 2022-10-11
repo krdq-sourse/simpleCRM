@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
-use App\Models\Company;
 use App\Repositories\Interfaces\CompanyRepositoryInterfaces;
-use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterfaces;
 use Illuminate\Http\Request;
 
