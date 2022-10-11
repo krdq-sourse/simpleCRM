@@ -11,6 +11,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <a href="{{route('client.create')}}"><button style="width: 10%; margin: 5px" type="button" class="btn btn-block btn-primary">{{__('Создать новую запись')}}</button></a>
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
